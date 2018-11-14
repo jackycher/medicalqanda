@@ -76,3 +76,29 @@ def f(p_id, flag, str):
         return str, p_id
     else:
         return str, p_id
+
+def knowledge_qa2(request):
+    goal = request.GET.get('goal', 'None')
+    status = 0
+    error = ' '
+    if goal == 'qa':
+        sentence = request.GET.get('sentence', 'None')
+        if sentence == 'None':
+            status = 1
+            error = '问句不能为空'
+            data = ' '
+            response = toJson(data, error, status)
+            return HttpResponse(response)
+        else:
+            # 先对问句进行分词
+            first, second, number = common.sentence_similarity(sentence)
+            Qtype = KnowledgeModels.question_set[number]
+            graph = Graph("localhost:7474", username="neo4j", password="1039")
+            sql = graph.evaluate("match(e:Qands) where e.Qtype={s} return e.sql", s=Qtype)
+            sql = sql.replace('$', first)
+            sql = sql.replace('#', second)
+            sql = sql.replace('%', second)
+            df = graph.evaluate(sql)
+            data = ' '.join([str(number), first, second, sql])
+            response = toJson(data, error, status)
+        return HttpResponse(df)
