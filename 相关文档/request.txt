@@ -2,3 +2,4 @@ gensim
 xmnlp
 jieba
 django
+py2neo

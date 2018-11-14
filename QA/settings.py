@@ -39,8 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'medicalQA.apps.MedicalqaConfig',
-    'django_neomodel',
+    'medicalQA.apps.MedicalqaConfig'
 ]
 
 MIDDLEWARE = [
